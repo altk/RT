@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{616b5da1-b8c1-4c68-af12-26ff21601f08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IncludePrivate">
+      <UniqueIdentifier>{1efe2213-a200-4e11-ae1b-5f8d883a243c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{ab18bfd1-5241-4246-97f2-a0a057736f0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourcesPrivate">
+      <UniqueIdentifier>{3119b7da-40a9-456b-8c9b-5aab7cd736fc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Sources\database.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SourcesPrivate\sqlite3.c">
+      <Filter>SourcesPrivate</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\statement_value.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\implementations.cpp">
+      <Filter>SourcesPrivate</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\transaction.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\bc_statement.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Include\database.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\exception.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\statement.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="IncludePrivate\database_impl.h">
+      <Filter>IncludePrivate</Filter>
+    </ClInclude>
+    <ClInclude Include="IncludePrivate\statement_impl.h">
+      <Filter>IncludePrivate</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\utilities.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="IncludePrivate\sqlite3.h">
+      <Filter>IncludePrivate</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\database_open_mode.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\implementations.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\statement_value.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="IncludePrivate\transaction_impl.h">
+      <Filter>IncludePrivate</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\transaction.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\raw_data.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\bc_statement.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
