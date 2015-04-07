@@ -3,7 +3,6 @@
 #include <string>
 #include <ppltasks.h>
 #include "sqlite3.h"
-#include "implementations.h"
 #include "database_open_mode.h"
 #include "statement_impl.h"
 #include "transaction_impl.h"
@@ -16,23 +15,22 @@ namespace rt
 		{
 			class database_impl sealed
 			{
-			private:
-				::std::string m_path;
+				std::string m_path;
 				database_open_mode m_open_mode;
 
-				static void unlock_notify_cb(void** args, int args_count)
+				static void unlock_notify_cb(void** args, int)
 				{
 					reinterpret_cast<concurrency::task_completion_event<void>*>(args[0])->set();
 				}
-				static ::std::unique_ptr<char[]> to_char(const wchar_t* p_str)
+				static std::unique_ptr<char[]> to_char(const wchar_t* p_str)
 				{
-					auto bufferSize = std::wcslen(p_str) + 1;
+					auto bufferSize = wcslen(p_str) + 1;
 					auto result = std::make_unique<char[]>(bufferSize);
 					if (0 == WideCharToMultiByte(CP_UTF8, 0, p_str, -1, result.get(), bufferSize, NULL, NULL))
 						throw std::exception("Can't convert wide string to normal string");
 					return result;
 				}
-				static ::std::unique_ptr<char[]> to_char(const wchar_t* p_str, int size)
+				static std::unique_ptr<char[]> to_char(const wchar_t* p_str, int size)
 				{
 					auto bufferSize = size*sizeof(wchar_t) + 1;
 					auto result = std::make_unique<char[]>(bufferSize);
@@ -41,28 +39,33 @@ namespace rt
 					return result;
 				}
 
-				static ::std::shared_ptr<sqlite3> open_database(const char* path, database_open_mode open_mode)
+				static std::shared_ptr<sqlite3> open_database(const char* path, database_open_mode open_mode)
 				{
+					static const auto & m_key = "BEC6F79B-69FD-45DA-A7C3-CCD962903ED8";
+
 					sqlite3* p_sqlite;
 					int flags = SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_SHAREDCACHE;
 					switch (open_mode)
 					{
-					case rt::sqlite::database_open_mode::readonly:
+					case database_open_mode::readonly:
 						flags |= SQLITE_OPEN_READONLY;
 						break;
-					case rt::sqlite::database_open_mode::read_write:
+					case database_open_mode::read_write:
 						flags |= SQLITE_OPEN_READWRITE;
 						break;
-					case rt::sqlite::database_open_mode::read_write_create:
+					case database_open_mode::read_write_create:
 						flags |= SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 						break;
 					}
 					if (SQLITE_OK != sqlite3_open_v2(path, &p_sqlite, flags, nullptr))
 						throw open_database_exception(sqlite3_errmsg(p_sqlite));
+
+					sqlite3_key_v2(p_sqlite, nullptr, m_key, _countof(m_key) - 1);
+
 					return std::shared_ptr<sqlite3>(p_sqlite, sqlite3_close_v2);
 				}
 
-				::std::shared_ptr<sqlite3> mp_sqlite;
+				std::shared_ptr<sqlite3> mp_sqlite;
 			public:
 				explicit database_impl(const char* path, database_open_mode open_mode)
 					: mp_sqlite(open_database(path, open_mode))
@@ -84,8 +87,8 @@ namespace rt
 				database_impl(const database_impl& source)
 					: database_impl(source.m_path, source.m_open_mode){}
 				database_impl(database_impl&& source) throw()
-					: mp_sqlite(std::move(source.mp_sqlite))
-					, m_path(std::move(source.m_path))
+					: mp_sqlite(move(source.mp_sqlite))
+					, m_path(move(source.m_path))
 					, m_open_mode(std::move(source.m_open_mode)){}
 
 				database_impl& operator=(const database_impl& source)
@@ -102,8 +105,8 @@ namespace rt
 				{
 					if (this != &source)
 					{
-						mp_sqlite = std::move(source.mp_sqlite);
-						m_path = std::move(source.m_path);
+						mp_sqlite = move(source.mp_sqlite);
+						m_path = move(source.m_path);
 						m_open_mode = std::move(source.m_open_mode);
 					}
 					return *this;

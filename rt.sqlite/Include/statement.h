@@ -46,33 +46,35 @@ namespace rt
 				: public statement
 			{
 			public:
+				using ValueType = ::rt::sqlite::statement_value < TResult, TResults... > ;
+
 #pragma region iterator
 				class iterator sealed : public ::std::iterator <
 					::std::input_iterator_tag,
-					::std::shared_ptr<::rt::sqlite::statement_value<TResult, TResults...>>,
+					::std::shared_ptr<ValueType>,
 					::std::ptrdiff_t,
-					::std::shared_ptr<::rt::sqlite::statement_value<TResult, TResults...>>*,
-					::std::shared_ptr<::rt::sqlite::statement_value<TResult, TResults...>>& >
+					::std::shared_ptr<ValueType>*,
+					::std::shared_ptr<ValueType>& >
 				{
 				private:
 					::rt::sqlite::implementations::pr_stmt_impl mpr_stmt_impl;
-					::std::shared_ptr<::rt::sqlite::statement_value<TResult, TResults...>> mps_stmt_value;
+					::std::shared_ptr<ValueType> mps_stmt_value;
 					bool m_isDone;
 				public:
 					iterator(const iterator&) = default;
 					iterator(::rt::sqlite::implementations::pr_stmt_impl p_stmt_impl, bool isDone) throw()
 						: mpr_stmt_impl(p_stmt_impl)
-						, mps_stmt_value(::std::make_shared<::rt::sqlite::statement_value<TResult, TResults...>>(p_stmt_impl))
+						, mps_stmt_value(::std::make_shared<ValueType>(p_stmt_impl))
 						, m_isDone(isDone)
 					{}
 
 					iterator& operator=(const iterator&) = default;
 
-					::std::shared_ptr<::rt::sqlite::statement_value<TResult, TResults...>>& operator*() throw()
+					::std::shared_ptr<ValueType>& operator*() throw()
 					{
 						return mps_stmt_value;
 					}
-					::std::shared_ptr<::rt::sqlite::statement_value<TResult, TResults...>>* operator->() throw()
+					::std::shared_ptr<ValueType>* operator->() throw()
 					{
 						return &mps_stmt_value;
 					}
